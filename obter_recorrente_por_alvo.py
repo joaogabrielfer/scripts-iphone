@@ -2,25 +2,25 @@ import sys
 from datetime import datetime
 
 if len(sys.argv) < 2:
-    print("Argumento faltando.")
-    exit()
+    sys.exit("Argumento faltando.")
 
-target_title = sys.argv[1]
+target_status = sys.argv[1]
+current_date = datetime.now().strftime("%d/%m")
 
-output = []
-outputs = []
 lines = sys.stdin.readlines()
 
 for line in lines:
     if line.strip().startswith('|'):
-        columns = [col.strip() for col in line.split('|')]
-        if columns[3] == target_title:
-            output.append(columns[1])  
-            output.append(columns[2])  
-            if target_title == "Pessoal":
-                output.append("Recorrente")  
-            output.append(datetime.now().strftime("%d/%m"))
-    output_str = "|".join(output)
-    outputs.append(output_str)
-
-print(outputs)
+        columns =[col.strip() for col in line.split('|')]
+        
+        if len(columns) >= 5 and columns[3] == target_status:
+            val = columns[1]
+            title = columns[2]
+            
+            if target_status == "Pessoal":
+                new_line = f"| {val} | {title} | Recorrente | {current_date} |\n"
+            else:
+                new_line = f"| {val} | {title} | {current_date} |\n"
+            
+            sys.stdout.write(new_line)
+            continue
